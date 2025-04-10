@@ -4,11 +4,6 @@ provider "aws" {
 
 resource "aws_s3_bucket" "task3_bucket" {
     bucket = "task3-terraform-vc"
-
-    tags = {
-        Name        = "task3-terraform-vc"
-        Environment = "Dev"
-    }
 }
 resource "aws_s3_bucket_notification" "s3_notify_lambda" {
   bucket = aws_s3_bucket.csv_bucket.id
