@@ -34,7 +34,7 @@ resource "aws_iam_policy" "lambda_s3_policy" {
         Action = [
           "s3:GetObject"
         ],
-        Resource = "${aws_s3_bucket.csv_bucket.arn}/*"
+        Resource = "${aws_s3_bucket.task3_bucket.arn}/*"
       }
     ]
   })
@@ -49,17 +49,15 @@ resource "aws_lambda_function" "my_lambda" {
   function_name = "my_lambda_function"
   handler       = "lambda_function.lambda_handler"
   runtime       = "python3.9"
-  role          = aws_iam_role.my_role.arn
+  role          = aws_iam_role.lambda_exec_role.arn
   filename      = "${path.module}/lambda/lambda_function_payload.zip"
   source_code_hash = filebase64sha256("${path.module}/lambda/lambda_function_payload.zip")
 }
 
-
-
 resource "aws_lambda_permission" "allow_s3_invoke" {
   statement_id  = "AllowS3Invoke"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.read_csv_lambda.function_name
+  function_name = aws_lambda_function.my_lambda.function_name
   principal     = "s3.amazonaws.com"
-  source_arn    = aws_s3_bucket.csv_bucket.arn
+  source_arn    = aws_s3_bucket.task3_bucket.arn
 }
