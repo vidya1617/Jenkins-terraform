@@ -45,15 +45,16 @@ resource "aws_iam_role_policy_attachment" "lambda_policy_attach" {
   policy_arn = aws_iam_policy.lambda_s3_policy.arn
 }
 
-resource "aws_lambda_function" "read_csv_lambda" {
-  function_name = "read_csvdata_lambda"
+resource "aws_lambda_function" "my_lambda" {
+  function_name = "my_lambda_function"
   handler       = "lambda_function.lambda_handler"
   runtime       = "python3.9"
-  role          = aws_iam_role.lambda_exec_role.arn
-  filename = "lambda/lambda_function_payload.zip"
-  source_code_hash = filebase64sha256("lambda/lambda_function_payload.zip")
-  timeout = 10
+  role          = aws_iam_role.my_role.arn
+  filename      = "${path.module}/lambda/lambda_function_payload.zip"
+  source_code_hash = filebase64sha256("${path.module}/lambda/lambda_function_payload.zip")
 }
+
+
 
 resource "aws_lambda_permission" "allow_s3_invoke" {
   statement_id  = "AllowS3Invoke"
