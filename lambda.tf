@@ -45,19 +45,13 @@ resource "aws_iam_role_policy_attachment" "lambda_policy_attach" {
   policy_arn = aws_iam_policy.lambda_s3_policy.arn
 }
 
-data "archive_file" "lambda_zip" {
-  type        = "zip"
-  source_file = "${path.module}/lambda/lambda_function.py"
-  output_path = "${path.module}/lambda_function.zip"
-}
-
 resource "aws_lambda_function" "read_csv_lambda" {
-  function_name = "read_csv_lambda"
+  function_name = "read_csvdata_lambda"
   handler       = "lambda_function.lambda_handler"
   runtime       = "python3.9"
   role          = aws_iam_role.lambda_exec_role.arn
-  filename      = data.archive_file.lambda_zip.output_path
-  source_code_hash = data.archive_file.lambda_zip.output_base64sha256
+  filename         = "${path.module}/lambda/lambda_function_payload.zip"
+  source_code_hash = filebase64sha256("${path.module}/lambda/lambda_function_payload.zip")
   timeout = 10
 }
 
