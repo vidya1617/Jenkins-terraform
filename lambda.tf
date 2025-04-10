@@ -50,8 +50,8 @@ resource "aws_lambda_function" "read_csv_lambda" {
   handler       = "lambda_function.lambda_handler"
   runtime       = "python3.9"
   role          = aws_iam_role.lambda_exec_role.arn
-  filename         = "${path.module}/lambda/lambda_function_payload.zip"
-  source_code_hash = filebase64sha256("${path.module}/lambda/lambda_function_payload.zip")
+  filename = "lambda/lambda_function_payload.zip"
+  source_code_hash = filebase64sha256("lambda/lambda_function_payload.zip")
   timeout = 10
 }
 
